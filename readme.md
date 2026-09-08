@@ -14,7 +14,7 @@
 - `T1` (`ID int`, `Text1`, `Text2`, `B`, …)
 - `T2` (`ID int`, `Text1`, `Text2`, `B`, …)
 
-<div align="right"><small><a href="seed.md#1.1">seed</a> · <a href="seed/1.1.sql">1.1.sql</a></small></div>
+<div align="right"><small><a href="seed/1.1.sql">seed - 1.1.sql</a></small></div>
 
 ### 1. Вывести все поля из обеих таблиц, вывести записи при условии, что ID обеих таблиц совпадают.
 
