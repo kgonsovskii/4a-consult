@@ -1,0 +1,26 @@
+@model Book
+@{
+    ViewData["Title"] = Model.Title;
+    var headings = (IReadOnlyList<string>)ViewBag.Headings;
+}
+<h1>@Model.Title</h1>
+<p class="meta">@Model.Author · @Model.Year · @Model.Publisher</p>
+<div class="card">
+    <h2>Оглавление</h2>
+    <div class="toc">@Html.Raw(Model.Toc.Html)</div>
+    @if (headings.Count > 0)
+    {
+        <h2>Выборка из XML (//h2)</h2>
+        <ul>
+            @foreach (var heading in headings)
+            {
+                <li>@heading</li>
+            }
+        </ul>
+    }
+</div>
+<p class="actions">
+    <a class="btn" href="/Books/Edit/@Model.Id">Изменить</a>
+    <a class="btn btn-danger" href="/Books/Delete/@Model.Id">Удалить</a>
+    <a class="btn" href="/">К списку</a>
+</p>

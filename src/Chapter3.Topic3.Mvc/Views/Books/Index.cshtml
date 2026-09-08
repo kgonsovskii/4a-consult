@@ -1,0 +1,33 @@
+@model IReadOnlyList<Book>
+@{
+    ViewData["Title"] = "Книги";
+}
+<div class="row">
+    <h1>Книги</h1>
+    <a class="btn btn-accent" href="/Books/Create">Добавить</a>
+</div>
+<table>
+    <thead>
+        <tr>
+            <th>Название</th>
+            <th>Автор</th>
+            <th>Год</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var book in Model)
+    {
+        <tr>
+            <td><a href="/Books/Details/@book.Id">@book.Title</a></td>
+            <td>@book.Author</td>
+            <td>@book.Year</td>
+            <td>
+                <a href="/Books/Edit/@book.Id">Изменить</a>
+                ·
+                <a href="/Books/Delete/@book.Id">Удалить</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

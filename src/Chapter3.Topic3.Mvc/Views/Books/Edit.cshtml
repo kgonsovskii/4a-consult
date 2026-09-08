@@ -1,0 +1,36 @@
+@model BookForm
+@{
+    ViewData["Title"] = Model.Id == 0 ? "Новая книга" : "Правка";
+    var action = Model.Id == 0 ? "Create" : "Edit";
+}
+<h1>@ViewData["Title"]</h1>
+<form method="post" asp-action="@action" asp-route-id="@(Model.Id == 0 ? null : Model.Id)">
+    <div asp-validation-summary="ModelOnly"></div>
+    <label asp-for="Title"></label>
+    <input asp-for="Title" />
+    <label asp-for="Author"></label>
+    <input asp-for="Author" />
+    <label asp-for="Year"></label>
+    <input asp-for="Year" type="number" />
+    <label asp-for="Publisher"></label>
+    <input asp-for="Publisher" />
+    <label asp-for="TocHtml"></label>
+    <textarea asp-for="TocHtml" id="TocHtml"></textarea>
+    <p class="actions">
+        <button class="btn btn-accent" type="submit">Сохранить</button>
+        <a class="btn" href="/">Отмена</a>
+    </p>
+</form>
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/tinymce@7/tinymce.min.js" referrerpolicy="origin"></script>
+    <script>
+        tinymce.init({
+            selector: '#TocHtml',
+            menubar: false,
+            plugins: 'lists',
+            toolbar: 'blocks | bold italic | bullist',
+            height: 280
+        });
+        document.querySelector('form')?.addEventListener('submit', () => tinymce.triggerSave());
+    </script>
+}

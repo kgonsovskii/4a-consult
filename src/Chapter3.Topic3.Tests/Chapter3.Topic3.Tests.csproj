@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="..\Chapter3.Topic3.Domain\Chapter3.Topic3.Domain.csproj" />
+    <ProjectReference Include="..\Chapter3.Topic3.Application\Chapter3.Topic3.Application.csproj" />
+    <ProjectReference Include="..\Chapter3.Topic3.Infrastructure\Chapter3.Topic3.Infrastructure.csproj" />
+    <ProjectReference Include="..\Chapter3.Topic3.Mvc\Chapter3.Topic3.Mvc.csproj">
+      <Aliases>MvcHost</Aliases>
+    </ProjectReference>
+    <ProjectReference Include="..\Chapter3.Topic3.WebForms\Chapter3.Topic3.WebForms.csproj">
+      <Aliases>WebFormsHost</Aliases>
+    </ProjectReference>
+  </ItemGroup>
+</Project>

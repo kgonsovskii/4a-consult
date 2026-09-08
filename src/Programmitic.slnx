@@ -3,4 +3,10 @@
   <Project Path="Chapter3.Topic1.Tests/Chapter3.Topic1.Tests.csproj" />
   <Project Path="Chapter3.Topic2/Chapter3.Topic2.csproj" />
   <Project Path="Chapter3.Topic2.Tests/Chapter3.Topic2.Tests.csproj" />
+  <Project Path="Chapter3.Topic3.Domain/Chapter3.Topic3.Domain.csproj" />
+  <Project Path="Chapter3.Topic3.Application/Chapter3.Topic3.Application.csproj" />
+  <Project Path="Chapter3.Topic3.Infrastructure/Chapter3.Topic3.Infrastructure.csproj" />
+  <Project Path="Chapter3.Topic3.Mvc/Chapter3.Topic3.Mvc.csproj" />
+  <Project Path="Chapter3.Topic3.WebForms/Chapter3.Topic3.WebForms.csproj" />
+  <Project Path="Chapter3.Topic3.Tests/Chapter3.Topic3.Tests.csproj" />
 </Solution>

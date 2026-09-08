@@ -1,0 +1,13 @@
+@page "{id:int}"
+@model DeleteModel
+@{
+    ViewData["Title"] = "Удалить";
+}
+<h1>Удалить «@Model.Book.Title»?</h1>
+<p class="meta">@Model.Book.Author · @Model.Book.Year</p>
+<form method="post">
+    <p class="actions">
+        <button class="btn btn-danger" type="submit">Удалить</button>
+        <a class="btn" href="/Details/@Model.Book.Id">Отмена</a>
+    </p>
+</form>

@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="..\Chapter3.Topic3.Domain\Chapter3.Topic3.Domain.csproj" />
+    <PackageReference Include="Npgsql" Version="9.0.4" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Sql\*.sql" />
+    <EmbeddedResource Include="Sql\toc.xml" />
+  </ItemGroup>
+</Project>

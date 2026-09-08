@@ -1,0 +1,6 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="..\Chapter3.Topic3.Domain\Chapter3.Topic3.Domain.csproj" />
+    <PackageReference Include="HtmlAgilityPack" Version="1.12.4" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ViewData["Title"] — Библиотека</title>
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+    <header>
+        <div class="wrap">
+            <a class="brand" href="/">Домашняя библиотека</a>
+            <nav>
+                <a href="/">Список</a>
+                <a href="/Books/Xml">XML</a>
+                <a href="/Books/Create">Добавить</a>
+            </nav>
+        </div>
+    </header>
+    <main class="wrap">
+        @RenderBody()
+    </main>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

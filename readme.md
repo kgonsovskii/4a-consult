@@ -1,6 +1,6 @@
 # Тестовое задание для компании «4А.Консалтинг»
 
-**Исполнитель:** Гонсовский Константин
+**Автор:** Гонсовский Константин
 
 - HH: https://hh.ru/resume/40b8acccff064127520039ed1f3861676b6837?hhtmFrom=applicant_profile
 - Telegram: [@KonstantinGonsovskii](https://t.me/KonstantinGonsovskii)
@@ -377,8 +377,6 @@ RETURNING Bid.Id, Purchase.OrgBuId, Purchase.TypeId;
 
 <div align="right"><small><a href="src/Chapter3.Topic2">src/Chapter3.Topic2</a></small></div>
 
-HashSet: кладём число; если уже было — есть дубль.
-
 ```csharp
 var seen = new HashSet<int>();
 foreach (var value in M)
@@ -387,4 +385,30 @@ foreach (var value in M)
         return true;
 }
 return false;
+```
+
+---
+
+### 3.3 Опциональное задание (его выполнение будет Вашим большим преимуществом)
+
+1. PostgreSQL вместо MS SQL Express.
+2. База `library`: книги домашней библиотеки. Поля: название, автор, год, издательство, оглавление в XML.
+3. Функции: `book_insert`, `book_update`, `book_delete`, `book_select`, `book_select_by_id`.
+4. Два проекта: MVC и Web Forms.
+5. Список, карточка, создание, правка, удаление — только через функции из п.3.
+6. В карточке HTML-редактор оглавления, в базу уходит XML.
+7. Выборка из XML: заголовки `h2` через `xmltable`.
+
+При старте приложение само создаёт базу, таблицы, функции и данные.
+
+<div align="right"><small><a href="src/Chapter3.Topic3.Domain">src/Chapter3.Topic3.Domain</a></small></div>
+<div align="right"><small><a href="src/Chapter3.Topic3.Application">src/Chapter3.Topic3.Application</a></small></div>
+<div align="right"><small><a href="src/Chapter3.Topic3.Infrastructure">src/Chapter3.Topic3.Infrastructure</a></small></div>
+<div align="right"><small><a href="src/Chapter3.Topic3.Mvc">src/Chapter3.Topic3.Mvc</a></small></div>
+<div align="right"><small><a href="src/Chapter3.Topic3.WebForms">src/Chapter3.Topic3.WebForms</a></small></div>
+
+```sql
+SELECT b.title, t.heading
+FROM book b,
+     xmltable('//h2' PASSING b.toc COLUMNS heading text PATH '.') AS t;
 ```

@@ -1,0 +1,36 @@
+@page "{id:int?}"
+@model EditModel
+@{
+    ViewData["Title"] = Model.Form.Id == 0 ? "Новая книга" : "Правка";
+}
+<h1>@ViewData["Title"]</h1>
+<form method="post">
+    <div asp-validation-summary="ModelOnly"></div>
+    <label asp-for="Form.Title"></label>
+    <input asp-for="Form.Title" />
+    <label asp-for="Form.Author"></label>
+    <input asp-for="Form.Author" />
+    <label asp-for="Form.Year"></label>
+    <input asp-for="Form.Year" type="number" />
+    <label asp-for="Form.Publisher"></label>
+    <input asp-for="Form.Publisher" />
+    <label asp-for="Form.TocHtml"></label>
+    <textarea asp-for="Form.TocHtml" id="TocHtml"></textarea>
+    <p class="actions">
+        <button class="btn btn-accent" type="submit">Сохранить</button>
+        <a class="btn" href="/">Отмена</a>
+    </p>
+</form>
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/tinymce@7/tinymce.min.js" referrerpolicy="origin"></script>
+    <script>
+        tinymce.init({
+            selector: '#TocHtml',
+            menubar: false,
+            plugins: 'lists',
+            toolbar: 'blocks | bold italic | bullist',
+            height: 280
+        });
+        document.querySelector('form')?.addEventListener('submit', () => tinymce.triggerSave());
+    </script>
+}

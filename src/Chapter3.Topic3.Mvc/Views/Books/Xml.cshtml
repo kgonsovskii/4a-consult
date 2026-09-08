@@ -1,0 +1,23 @@
+@model IReadOnlyList<TocHeading>
+@{
+    ViewData["Title"] = "XML";
+}
+<h1>Выборка из XML</h1>
+<p class="meta">xmltable('//h2') по полю toc</p>
+<table>
+    <thead>
+        <tr>
+            <th>Книга</th>
+            <th>Заголовок</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var row in Model)
+    {
+        <tr>
+            <td><a href="/Books/Details/@row.BookId">@row.BookTitle</a></td>
+            <td>@row.Heading</td>
+        </tr>
+    }
+    </tbody>
+</table>

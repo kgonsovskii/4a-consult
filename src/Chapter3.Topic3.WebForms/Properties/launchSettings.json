@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "Chapter3.Topic3.WebForms": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "applicationUrl": "http://localhost:5102",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}
