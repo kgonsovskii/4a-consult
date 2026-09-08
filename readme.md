@@ -127,36 +127,38 @@ FROM T;
 Отфильтровать данные по **StatusId != 3**.
 
 ```sql
+WITH xml_data AS (
+    SELECT xmlelement(
+        name root,
+        xmlagg(
+            xmlelement(
+                name "T",
+                xmlforest(
+                    Id AS "Id",
+                    Code AS "Code",
+                    Name AS "Name",
+                    StatusId AS "StatusId"
+                )
+            )
+            ORDER BY Id
+        )
+    ) AS data
+    FROM T
+)
 SELECT
     x."Id",
     x."Code",
     x."Name",
     x."StatusId"
-FROM xmltable(
-    '/root/T'
-    PASSING (
-        SELECT xmlelement(
-            name root,
-            xmlagg(
-                xmlelement(
-                    name "T",
-                    xmlforest(
-                        Id AS "Id",
-                        Code AS "Code",
-                        Name AS "Name",
-                        StatusId AS "StatusId"
-                    )
-                )
-                ORDER BY Id
-            )
-        )
-        FROM T
-    )
-    COLUMNS
-        "Id"       int  PATH 'Id',
-        "Code"     text PATH 'Code',
-        "Name"     text PATH 'Name',
-        "StatusId" int  PATH 'StatusId'
-) AS x
+FROM xml_data,
+     xmltable(
+         '/root/T'
+         PASSING data
+         COLUMNS
+             "Id"       int  PATH 'Id',
+             "Code"     text PATH 'Code',
+             "Name"     text PATH 'Name',
+             "StatusId" int  PATH 'StatusId'
+     ) AS x
 WHERE x."StatusId" != 3;
 ```
