@@ -43,9 +43,9 @@ WHERE T2.ID IS NULL;
 
 ---
 
-### 1.2 Написать запрос, выводящий данные в XML.
+### 1.2 Как вывести результат запроса в XML?
 
-Пусть есть таблица `T` со следующим видом и содержанием.
+Пусть есть таблица `T` со следующим видом и содержанием. Что вернет SQL запрос?
 
 | Id | Code | Name | StatusId |
 | ---: | --- | --- | ---: |
@@ -75,4 +75,45 @@ SELECT xmlelement(
     )
 )
 FROM T;
+```
+
+```xml
+<root>
+  <T>
+    <Id>1</Id>
+    <Code>gargadgadfga</Code>
+    <Name>Запрос предложений 1</Name>
+    <StatusId>45</StatusId>
+  </T>
+  <T>
+    <Id>2</Id>
+    <Code>bsftrggdfgadfgdfat</Code>
+    <Name>Запрос предложений 2</Name>
+    <StatusId>2</StatusId>
+  </T>
+  <T>
+    <Id>3</Id>
+    <Code>gfadgdfsgdfsg</Code>
+    <Name>Запрос предложений 3</Name>
+    <StatusId>45</StatusId>
+  </T>
+  <T>
+    <Id>4</Id>
+    <Code>afgereaerffdgvdf</Code>
+    <Name>Запрос предложений 4</Name>
+    <StatusId>3</StatusId>
+  </T>
+  <T>
+    <Id>5</Id>
+    <Code>dgadfterdsgsdgad</Code>
+    <Name>Запрос предложений 5</Name>
+    <StatusId>45</StatusId>
+  </T>
+  <T>
+    <Id>6</Id>
+    <Code>argrgag</Code>
+    <Name>Запрос предложений 6</Name>
+    <StatusId>2</StatusId>
+  </T>
+</root>
 ```
