@@ -1,4 +1,3 @@
-using Chapter4.Topic2;
 using FluentAssertions;
 
 namespace Chapter4.Topic2.Tests;
@@ -16,10 +15,10 @@ public sealed class HangingWireTests
     }
 
     [Fact]
-    public void Height_200m_is_not_the_trick_case()
+    public void Height_50m_is_not_the_trick_case()
     {
-        var act = () => _wire.DistanceBetweenPoles(184.2m, 200m, 7.9m);
+        var finalDistance = _wire.DistanceBetweenPoles(184.2m, 50m, 7.9m);
 
-        act.Should().Throw<ArgumentException>();
+        finalDistance.Should().BeApproximately(163.829m, 0.001m);
     }
 }

@@ -1,4 +1,3 @@
-using Chapter4.Topic1;
 using FluentAssertions;
 
 namespace Chapter4.Topic1.Tests;
