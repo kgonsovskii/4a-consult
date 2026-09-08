@@ -167,7 +167,15 @@ WHERE x."StatusId" != 3;
 
 ### 1.4 Что такое hints
 
-В SQL Server это `WITH (NOLOCK)`, `OPTION (RECOMPILE)`. В Postgres крутить планировщик: `SET enable_seqscan = off`, `enable_hashjoin`.
+В SQL Server три кучи:
+
+- к запросу: `OPTION (RECOMPILE, HASH JOIN)`
+- к JOIN: `INNER LOOP JOIN`
+- к блокировкам: `WITH (NOLOCK)`, `UPDLOCK`
+
+В Postgres своих hints нет. Крутить планировщик: `SET enable_seqscan = off`, `enable_hashjoin`.
+
+Или `pg_hint_plan`: `/*+ HashJoin(a b) SeqScan(a) */`. Блокировки — `FOR UPDATE`, не NOLOCK.
 
 ---
 
