@@ -1,0 +1,5 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="..\Chapter3.Topic2\Chapter3.Topic2.csproj" />
+  </ItemGroup>
+</Project>

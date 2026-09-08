@@ -366,3 +366,25 @@ RETURNING Bid.Id, Purchase.OrgBuId, Purchase.TypeId;
 - `BidCurrency`: нет закрывающего тега.
 - `BuId`: атрибут `AccessByOrganization` без кавычек.
 - `RequestNo`: вместо `</RequestNo>` стоит открывающий `<RequestNo>`.
+
+---
+
+### 3.2 Поиск дублей в массиве
+
+Дано: массив `M` типа `int32` из `N` элементов (`N` очень много). Компьютер с неограниченной памятью, пользоваться можно как угодно.
+
+Вопрос: циклом за один проход определить, есть ли повторяющиеся элементы. Написать алгоритм или объяснить идею.
+
+<div align="right"><small><a href="src/Chapter3.Topic2">src/Chapter3.Topic2</a></small></div>
+
+HashSet: кладём число; если уже было — есть дубль.
+
+```csharp
+var seen = new HashSet<int>();
+foreach (var value in M)
+{
+    if (!seen.Add(value))
+        return true;
+}
+return false;
+```
