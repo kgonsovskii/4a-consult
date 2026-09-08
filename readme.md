@@ -117,3 +117,46 @@ FROM T;
   </T>
 </root>
 ```
+
+---
+
+### 1.3 Как выбрать данные из поля с XML?
+
+Написать запрос, выбирающий данные из XML из предыдущего вопроса.
+
+Отфильтровать данные по **StatusId != 3**.
+
+```sql
+SELECT
+    x."Id",
+    x."Code",
+    x."Name",
+    x."StatusId"
+FROM xmltable(
+    '/root/T'
+    PASSING (
+        SELECT xmlelement(
+            name root,
+            xmlagg(
+                xmlelement(
+                    name "T",
+                    xmlforest(
+                        Id AS "Id",
+                        Code AS "Code",
+                        Name AS "Name",
+                        StatusId AS "StatusId"
+                    )
+                )
+                ORDER BY Id
+            )
+        )
+        FROM T
+    )
+    COLUMNS
+        "Id"       int  PATH 'Id',
+        "Code"     text PATH 'Code',
+        "Name"     text PATH 'Name',
+        "StatusId" int  PATH 'StatusId'
+) AS x
+WHERE x."StatusId" != 3;
+```
