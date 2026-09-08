@@ -64,25 +64,6 @@ SELECT xmlelement(
     xmlagg(
         xmlelement(
             name "T",
-            xmlattributes(
-                Id AS "Id",
-                Code AS "Code",
-                Name AS "Name",
-                StatusId AS "StatusId"
-            )
-        )
-        ORDER BY Id
-    )
-)
-FROM T;
-```
-
-```sql
-SELECT xmlelement(
-    name root,
-    xmlagg(
-        xmlelement(
-            name "T",
             xmlforest(
                 Id AS "Id",
                 Code AS "Code",
