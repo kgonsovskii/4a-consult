@@ -2,4 +2,8 @@
   <ItemGroup>
     <ProjectReference Include="..\Chapter3.Topic1\Chapter3.Topic1.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="invalid.xml" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="valid.xml" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
 </Project>
