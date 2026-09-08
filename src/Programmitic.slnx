@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="Chapter3.Topic1/Chapter3.Topic1.csproj" />
+  <Project Path="Chapter3.Topic1.Tests/Chapter3.Topic1.Tests.csproj" />
+</Solution>
