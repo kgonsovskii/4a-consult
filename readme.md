@@ -186,3 +186,42 @@ WHERE x."StatusId" != 3;
 ### 1.7 Чем DELETE отличается от TRUNCATE?
 
 `DELETE` снимает строки, можно `WHERE`, срабатывают триггеры, каждая строка пишется в лог. `TRUNCATE` сразу опустошает таблицу: быстрее, без `WHERE` и без delete-триггеров. В транзакции оба можно откатить.
+
+---
+
+## 2. SQL — практические задачи
+
+### 2.1 Напишите хранимую процедуру
+
+Есть таблица `T` со счетами банка. Поля: `N` — номер счёта, `S` — сумма на счёте.
+
+Написать процедуру: аргументы `@N1`, `@N2`, `@S`. Перевести сумму `@S` со счёта `@N1` на счёт `@N2`, проверить что на `@N1` хватает денег. Перевод обернуть в транзакцию.
+
+<div align="right"><small><a href="seed-2.1.sql">seed - 2.1.sql</a></small></div>
+
+```sql
+CREATE OR REPLACE PROCEDURE transfer(n1 int, n2 int, amount numeric)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    bal numeric;
+BEGIN
+    SELECT S INTO bal FROM T WHERE N = n1 FOR UPDATE;
+
+    IF bal IS NULL THEN
+        RAISE EXCEPTION 'Нет счёта %', n1;
+    END IF;
+
+    IF NOT EXISTS (SELECT 1 FROM T WHERE N = n2 FOR UPDATE) THEN
+        RAISE EXCEPTION 'Нет счёта %', n2;
+    END IF;
+
+    IF bal < amount THEN
+        RAISE EXCEPTION 'Недостаточно средств';
+    END IF;
+
+    UPDATE T SET S = S - amount WHERE N = n1;
+    UPDATE T SET S = S + amount WHERE N = n2;
+END;
+$$;
+```

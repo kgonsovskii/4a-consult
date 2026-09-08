@@ -1,0 +1,10 @@
+DROP TABLE IF EXISTS T;
+
+CREATE TABLE T (
+    N int PRIMARY KEY,
+    S numeric(12, 2) NOT NULL
+);
+
+INSERT INTO T (N, S) VALUES
+    (1, 1000.00),
+    (2, 200.00);
