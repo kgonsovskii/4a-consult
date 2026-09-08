@@ -1,6 +1,7 @@
 # Seed
 
-<a id="seed"></a>
+<a id="1.1"></a>
+## 1.1
 
 ```sql
 IF OBJECT_ID(N'dbo.T1', N'U') IS NULL
