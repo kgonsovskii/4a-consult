@@ -317,12 +317,8 @@ WHERE Bid.StatusId = 6
 После успешной регистрации менять `Bid.StatusId` в той же транзакции, что и сам документ.
 
 ```sql
-BEGIN;
-
 UPDATE Bid
 SET StatusId = 7
 WHERE Id = @BidId
   AND StatusId = 6;
-
-COMMIT;
 ```
