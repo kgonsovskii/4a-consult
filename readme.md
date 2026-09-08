@@ -14,59 +14,9 @@
 - `T1` (`ID int`, `Text1`, `Text2`, `B`, …)
 - `T2` (`ID int`, `Text1`, `Text2`, `B`, …)
 
-**Тестовые данные:** `T1` — ID 1, 2, 3; `T2` — ID 2, 3, 4 (1 только в T1, 4 только в T2).
+<div align="right"><small><a href="seed.md#seed">seed</a></small></div>
 
-| T1.ID | Text1 | Text2 | B | T2.ID | Text1 | Text2 | B |
-| ---: | --- | --- | ---: | ---: | --- | --- | ---: |
-| 1 | A1 | one | 1 | | | | |
-| 2 | A2 | two | 0 | 2 | B2 | two | 0 |
-| 3 | A3 | three | 1 | 3 | B3 | three | 1 |
-| | | | | 4 | B4 | four | 0 |
-
-<table align="right">
-<tr>
-<td>
-
-<small>Seeding — создать таблицы, если их нет, и заполнить, если пустые</small>
-
-```sql
-IF OBJECT_ID(N'dbo.T1', N'U') IS NULL
-    CREATE TABLE dbo.T1 (
-        ID int NOT NULL PRIMARY KEY,
-        Text1 nvarchar(50) NULL,
-        Text2 nvarchar(50) NULL,
-        B bit NULL
-    );
-
-IF OBJECT_ID(N'dbo.T2', N'U') IS NULL
-    CREATE TABLE dbo.T2 (
-        ID int NOT NULL PRIMARY KEY,
-        Text1 nvarchar(50) NULL,
-        Text2 nvarchar(50) NULL,
-        B bit NULL
-    );
-
-IF NOT EXISTS (SELECT 1 FROM dbo.T1)
-    INSERT INTO dbo.T1 (ID, Text1, Text2, B) VALUES
-        (1, N'A1', N'one',   1),
-        (2, N'A2', N'two',   0),
-        (3, N'A3', N'three', 1);
-
-IF NOT EXISTS (SELECT 1 FROM dbo.T2)
-    INSERT INTO dbo.T2 (ID, Text1, Text2, B) VALUES
-        (2, N'B2', N'two',   0),
-        (3, N'B3', N'three', 1),
-        (4, N'B4', N'four',  0);
-```
-
-</td>
-</tr>
-</table>
-<br clear="all"/>
-
-### 1. Все поля из обеих таблиц, ID совпадают
-
-Нужны только строки, у которых есть пара в обеих таблицах — `INNER JOIN`.
+### 1. Вывести все поля из обеих таблиц, вывести записи при условии, что ID обеих таблиц совпадают.
 
 ```sql
 SELECT T1.*, T2.*
@@ -74,11 +24,7 @@ FROM T1
 INNER JOIN T2 ON T1.ID = T2.ID;
 ```
 
-Эквивалентная запись: `JOIN` без слова `INNER`.
-
-### 2. Все поля из обеих таблиц, все записи из T1 и только имеющиеся в T2
-
-Нужны все строки `T1`. Если в `T2` нет такого `ID`, поля `T2` будут `NULL` — `LEFT JOIN`.
+### 2. Вывести все поля из обеих таблиц, вывести все записи из T1 и только имеющиеся в T2.
 
 ```sql
 SELECT T1.*, T2.*
@@ -86,9 +32,7 @@ FROM T1
 LEFT JOIN T2 ON T1.ID = T2.ID;
 ```
 
-### 3. Все записи из T1, у которых такого ID нет в T2
-
-Нужны строки `T1` без пары в `T2` — anti-join: `LEFT JOIN` и отсев совпадений по `T2.ID IS NULL`.
+### 3. Вывести все записи из T1, при условии, что таких ID нет в T2.
 
 ```sql
 SELECT T1.*
@@ -97,25 +41,11 @@ LEFT JOIN T2 ON T1.ID = T2.ID
 WHERE T2.ID IS NULL;
 ```
 
-Другой вариант — `NOT EXISTS` (удобно, если в `T2.ID` могут быть `NULL`):
-
-```sql
-SELECT T1.*
-FROM T1
-WHERE NOT EXISTS (
-    SELECT 1
-    FROM T2
-    WHERE T2.ID = T1.ID
-);
-```
-
 ---
 
 ### 1.2 Как вывести результат запроса в XML?
 
-В SQL Server результат `SELECT` превращается в XML предложением `FOR XML`.
-
-Пусть есть таблица `T`:
+Пусть есть таблица `T` со следующим видом и содержанием. Что вернет SQL запрос?
 
 | Id | Code | Name | StatusId |
 | ---: | --- | --- | ---: |
@@ -125,8 +55,6 @@ WHERE NOT EXISTS (
 | 4 | afgereaerffdgvdf | Запрос предложений 4 | 3 |
 | 5 | dgadfterdsgsdgad | Запрос предложений 5 | 45 |
 | 6 | argrgag | Запрос предложений 6 | 2 |
-
-`FOR XML AUTO` — элемент по имени таблицы, столбцы как атрибуты:
 
 ```sql
 SELECT Id, Code, Name, StatusId
@@ -145,8 +73,6 @@ FOR XML AUTO, ROOT('root');
 </root>
 ```
 
-`FOR XML PATH` — столбцы как вложенные элементы (имя строки задаётся в `PATH`):
-
 ```sql
 SELECT Id, Code, Name, StatusId
 FROM T
@@ -161,8 +87,35 @@ FOR XML PATH('T'), ROOT('root');
     <Name>Запрос предложений 1</Name>
     <StatusId>45</StatusId>
   </T>
-  <!-- … остальные строки аналогично … -->
+  <T>
+    <Id>2</Id>
+    <Code>bsftrggdfgadfgdfat</Code>
+    <Name>Запрос предложений 2</Name>
+    <StatusId>2</StatusId>
+  </T>
+  <T>
+    <Id>3</Id>
+    <Code>gfadgdfsgdfsg</Code>
+    <Name>Запрос предложений 3</Name>
+    <StatusId>45</StatusId>
+  </T>
+  <T>
+    <Id>4</Id>
+    <Code>afgereaerffdgvdf</Code>
+    <Name>Запрос предложений 4</Name>
+    <StatusId>3</StatusId>
+  </T>
+  <T>
+    <Id>5</Id>
+    <Code>dgadfterdsgsdgad</Code>
+    <Name>Запрос предложений 5</Name>
+    <StatusId>45</StatusId>
+  </T>
+  <T>
+    <Id>6</Id>
+    <Code>argrgag</Code>
+    <Name>Запрос предложений 6</Name>
+    <StatusId>2</StatusId>
+  </T>
 </root>
 ```
-
-`FOR XML RAW` даёт элемент `<row>` с атрибутами. Без `ROOT` SQL Server возвращает фрагмент XML, не документ с одним корнем.
