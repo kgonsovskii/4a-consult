@@ -6,13 +6,10 @@ namespace Chapter4.Topic2.Tests;
 public sealed class HangingWireTests
 {
     [Fact]
-    public void Poles_stand_together_when_half_wire_equals_drop()
+    public void Distance_between_poles_is_zero()
     {
-        const decimal length = 184.2m;
-        const decimal height = 100m;
-        const decimal clearance = 7.9m;
+        var finalDistance = new HangingWire().DistanceBetweenPoles(184.2m, 100m, 7.9m);
 
-        (length / 2m).Should().Be(height - clearance);
-        new HangingWire().DistanceBetweenPoles(length, height, clearance).Should().Be(0m);
+        finalDistance.Should().Be(0m);
     }
 }
