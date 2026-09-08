@@ -220,8 +220,12 @@ BEGIN
         RAISE EXCEPTION 'Недостаточно средств';
     END IF;
 
-    UPDATE T SET S = S - amount WHERE N = n1;
-    UPDATE T SET S = S + amount WHERE N = n2;
+    UPDATE T
+    SET S = CASE N
+        WHEN n1 THEN S - amount
+        WHEN n2 THEN S + amount
+    END
+    WHERE N IN (n1, n2);
 END;
 $$;
 ```
