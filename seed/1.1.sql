@@ -1,9 +1,3 @@
-# Seed
-
-<a id="1.1"></a>
-## 1.1
-
-```sql
 CREATE TABLE IF NOT EXISTS T1 (
     ID     int         NOT NULL PRIMARY KEY,
     Text1  varchar(50) NULL,
@@ -35,4 +29,3 @@ FROM (VALUES
     (4, 'B4', 'four',  false)
 ) AS v(ID, Text1, Text2, B)
 WHERE NOT EXISTS (SELECT 1 FROM T2);
-```
