@@ -314,11 +314,11 @@ WHERE Bid.StatusId = 6
 
 После регистрации статус остался 6. Задание каждую минуту снова берёт те же лоты.
 
-После успешной регистрации менять `Bid.StatusId` в той же транзакции, что и сам документ.
-
 ```sql
 UPDATE Bid
 SET StatusId = 7
-WHERE Id = @BidId
-  AND StatusId = 6;
+FROM Purchase
+WHERE Purchase.Id = Bid.PurchaseId
+  AND Bid.StatusId = 6
+RETURNING Bid.Id, Purchase.OrgBuId, Purchase.TypeId;
 ```
