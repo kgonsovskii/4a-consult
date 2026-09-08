@@ -259,6 +259,25 @@ FROM Purchase
 FOR XML PATH('row'), ROOT('data');
 ```
 
+```sql
+SELECT xmlelement(
+    name data,
+    xmlagg(
+        xmlelement(
+            name "row",
+            xmlforest(
+                Id AS "Id",
+                Code AS "Code",
+                Name AS "Name",
+                StatusId AS "StatusId"
+            )
+        )
+        ORDER BY Id
+    )
+)
+FROM Purchase;
+```
+
 ```xml
 <data>
   <row>
