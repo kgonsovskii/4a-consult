@@ -5,6 +5,6 @@ public sealed class TaxSystems
     public const decimal IncomeRate = 0.06m;
     public const decimal ProfitRate = 0.15m;
 
-    public decimal ExpenseShareWhenEqual() =>
+    public static decimal ExpenseShareWhenEqual() =>
         1m - IncomeRate / ProfitRate;
 }

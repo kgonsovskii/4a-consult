@@ -9,7 +9,7 @@ public sealed class TaxSystemsTests
     [Fact]
     public void Systems_are_equal_at_sixty_percent_expenses()
     {
-        var share = _taxes.ExpenseShareWhenEqual();
+        var share = TaxSystems.ExpenseShareWhenEqual();
         const decimal income = 1000m;
         var expenses = income * share;
 
