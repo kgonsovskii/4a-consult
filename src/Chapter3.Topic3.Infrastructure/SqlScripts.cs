@@ -1,8 +1,15 @@
+using System.Collections.Concurrent;
+
 namespace Chapter3.Topic3.Infrastructure;
 
-internal static class SqlScripts
+public sealed class SqlScripts
 {
-    public static string Load(string file)
+    private readonly ConcurrentDictionary<string, string> _cache = new();
+
+    public string Load(string file) =>
+        _cache.GetOrAdd(file, Read);
+
+    private static string Read(string file)
     {
         var name = $"Chapter3.Topic3.Infrastructure.Sql.{file}";
         using var stream = typeof(SqlScripts).Assembly.GetManifestResourceStream(name)

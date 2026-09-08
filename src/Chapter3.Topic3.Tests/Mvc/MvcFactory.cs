@@ -1,5 +1,3 @@
-extern alias MvcHost;
-
 using Chapter3.Topic3.Domain;
 using Chapter3.Topic3.Tests.Fakes;
 using Microsoft.AspNetCore.Hosting;
@@ -9,7 +7,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Chapter3.Topic3.Tests.Mvc;
 
-public sealed class MvcFactory : WebApplicationFactory<MvcHost::Program>
+public sealed class MvcFactory : WebApplicationFactory<Chapter3.Topic3.Mvc.Program>
 {
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {

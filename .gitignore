@@ -43,11 +43,6 @@ coverage*.info
 .env
 *.pfx
 
-# SQLite
-*.db
-*.db-shm
-*.db-wal
-
 
 # OS
 Thumbs.db

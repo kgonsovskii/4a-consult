@@ -9,7 +9,7 @@ public sealed class SchemaTests
     [Fact]
     public void Embedded_sql_is_in_assembly()
     {
-        var names = typeof(Schema).Assembly.GetManifestResourceNames();
+        var names = typeof(SqlScripts).Assembly.GetManifestResourceNames();
 
         names.Should().Contain("Chapter3.Topic3.Infrastructure.Sql.schema.sql");
         names.Should().Contain("Chapter3.Topic3.Infrastructure.Sql.seed.sql");
@@ -23,8 +23,9 @@ public sealed class SchemaTests
         var cs = $"Data Source={path};Pooling=False";
         try
         {
-            await Schema.ApplyAsync(cs);
-            var books = await new SqliteBookRepository(cs).ListAsync();
+            var sql = new SqlScripts();
+            await new Schema(sql).ApplyAsync(cs);
+            var books = await new SqliteBookRepository(cs, sql).ListAsync();
 
             books.Should().HaveCount(2);
             books[0].Title.Should().Be("Обломов");

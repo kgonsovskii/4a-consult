@@ -2,16 +2,8 @@ using Microsoft.Data.Sqlite;
 
 namespace Chapter3.Topic3.Infrastructure;
 
-public static class Schema
+public sealed class Schema(SqlScripts sql)
 {
-    public static async Task ApplyAsync(string connectionString)
-    {
-        await using var connection = new SqliteConnection(connectionString);
-        await connection.OpenAsync();
-        await Exec(connection, SqlScripts.Load("schema.sql"));
-        await Exec(connection, SqlScripts.Load("seed.sql"));
-    }
-
     public static string Resolve(string connectionString, string contentRoot)
     {
         var settings = new SqliteConnectionStringBuilder(connectionString);
@@ -21,6 +13,14 @@ public static class Schema
         }
 
         return settings.ConnectionString;
+    }
+
+    public async Task ApplyAsync(string connectionString)
+    {
+        await using var connection = new SqliteConnection(connectionString);
+        await connection.OpenAsync();
+        await Exec(connection, sql.Load("schema.sql"));
+        await Exec(connection, sql.Load("seed.sql"));
     }
 
     private static async Task Exec(SqliteConnection connection, string sql)

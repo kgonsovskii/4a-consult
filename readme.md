@@ -401,11 +401,7 @@ return false;
 
 При старте приложение само создаёт файл БД, таблицы и данные.
 
-<div align="right"><small><a href="src/Chapter3.Topic3.Domain">src/Chapter3.Topic3.Domain</a></small></div>
-<div align="right"><small><a href="src/Chapter3.Topic3.Application">src/Chapter3.Topic3.Application</a></small></div>
-<div align="right"><small><a href="src/Chapter3.Topic3.Infrastructure">src/Chapter3.Topic3.Infrastructure</a></small></div>
-<div align="right"><small><a href="src/Chapter3.Topic3.Mvc">src/Chapter3.Topic3.Mvc</a></small></div>
-<div align="right"><small><a href="src/Chapter3.Topic3.WebForms">src/Chapter3.Topic3.WebForms</a></small></div>
+<div align="right"><small><a href="src">src</a></small></div>
 
 ```sql
 SELECT title, toc FROM book;
