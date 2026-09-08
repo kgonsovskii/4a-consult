@@ -214,13 +214,19 @@ AS $$
 DECLARE
     bal numeric;
 BEGIN
-    SELECT S INTO bal FROM T WHERE N = n1 FOR UPDATE;
+    PERFORM 1
+    FROM T
+    WHERE N IN (n1, n2)
+    ORDER BY N
+    FOR UPDATE;
+
+    SELECT S INTO bal FROM T WHERE N = n1;
 
     IF bal IS NULL THEN
         RAISE EXCEPTION 'Нет счёта %', n1;
     END IF;
 
-    IF NOT EXISTS (SELECT 1 FROM T WHERE N = n2 FOR UPDATE) THEN
+    IF NOT EXISTS (SELECT 1 FROM T WHERE N = n2) THEN
         RAISE EXCEPTION 'Нет счёта %', n2;
     END IF;
 
