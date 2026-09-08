@@ -1,4 +1,5 @@
 using Chapter3.Topic3.Domain;
+using Chapter3.Topic3.Infrastructure;
 using Chapter3.Topic3.Tests.Fakes;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -14,6 +15,7 @@ public sealed class WebFormsFactory : WebApplicationFactory<Chapter3.Topic3.WebF
         builder.UseEnvironment("Testing");
         builder.ConfigureServices(services =>
         {
+            services.RemoveAll<ISqliteBookRepository>();
             services.RemoveAll<IBookRepository>();
             services.AddSingleton<IBookRepository>(new InMemoryBookRepository(SampleBook.Oblomov()));
         });

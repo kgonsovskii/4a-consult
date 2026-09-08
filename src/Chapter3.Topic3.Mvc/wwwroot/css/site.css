@@ -118,3 +118,16 @@ input[type=text], input[type=number], textarea {
 .toc h2 { font-size: 1.05rem; margin: 1rem 0 0.3rem; }
 
 .field-validation-error, .validation-summary-errors { color: var(--accent); }
+
+.flash {
+    padding: 0.6rem 0.75rem;
+    border: 1px solid var(--line);
+    margin: 0 0 1rem;
+}
+
+.flash-ok { background: #eef6ea; }
+
+.flash-err {
+    background: #f8ece8;
+    color: var(--accent);
+}

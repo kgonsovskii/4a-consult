@@ -30,5 +30,24 @@ public sealed class BooksHappyPathTests(MvcFactory factory) : IClassFixture<MvcF
 
         response.StatusCode.Should().Be(HttpStatusCode.Redirect);
         response.Headers.Location!.ToString().Should().Contain("/Books/Details/");
+
+        var card = await _client.GetAsync(response.Headers.Location);
+        WebUtility.HtmlDecode(await card.Content.ReadAsStringAsync()).Should().Contain("Книга добавлена.");
+    }
+
+    [Fact]
+    public async Task Create_empty_shows_errors()
+    {
+        var response = await _client.PostAsync("/Books/Create", new FormUrlEncodedContent(new Dictionary<string, string>
+        {
+            ["Title"] = "",
+            ["Author"] = "",
+            ["Year"] = "",
+            ["Publisher"] = "",
+            ["TocHtml"] = ""
+        }));
+
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        WebUtility.HtmlDecode(await response.Content.ReadAsStringAsync()).Should().Contain("Нужно название");
     }
 }

@@ -7,18 +7,28 @@ public sealed class BookForm
 {
     public int Id { get; set; }
 
-    [Required, Display(Name = "Название")]
+    [Required(ErrorMessage = "Нужно название")]
+    [StringLength(256, ErrorMessage = "Название слишком длинное")]
+    [Display(Name = "Название")]
     public string Title { get; set; } = "";
 
-    [Required, Display(Name = "Автор")]
+    [Required(ErrorMessage = "Нужен автор")]
+    [StringLength(256, ErrorMessage = "Автор слишком длинный")]
+    [Display(Name = "Автор")]
     public string Author { get; set; } = "";
 
-    [Range(1, 3000), Display(Name = "Год")]
-    public int Year { get; set; }
+    [Required(ErrorMessage = "Нужен год")]
+    [Range(1, 3000, ErrorMessage = "Год от 1 до 3000")]
+    [Display(Name = "Год")]
+    public int? Year { get; set; }
 
-    [Required, Display(Name = "Издательство")]
+    [Required(ErrorMessage = "Нужно издательство")]
+    [StringLength(256, ErrorMessage = "Издательство слишком длинное")]
+    [Display(Name = "Издательство")]
     public string Publisher { get; set; } = "";
 
+    [Required(ErrorMessage = "Нужно оглавление")]
+    [StringLength(20000, ErrorMessage = "Оглавление слишком длинное")]
     [Display(Name = "Оглавление")]
     public string TocHtml { get; set; } = "";
 
@@ -35,8 +45,9 @@ public sealed class BookForm
     public Book ToBook()
     {
         var toc = TocParser.Parse(TocHtml);
+        var year = Year ?? 0;
         return Id == 0
-            ? Book.Create(Title, Author, Year, Publisher, toc)
-            : Book.Rehydrate(Id, Title, Author, Year, Publisher, toc);
+            ? Book.Create(Title, Author, year, Publisher, toc)
+            : Book.Rehydrate(Id, Title, Author, year, Publisher, toc);
     }
 }

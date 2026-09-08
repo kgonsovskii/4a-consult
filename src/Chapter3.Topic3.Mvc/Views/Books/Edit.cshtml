@@ -8,20 +8,28 @@
     <div asp-validation-summary="ModelOnly"></div>
     <label asp-for="Title"></label>
     <input asp-for="Title" />
+    <span asp-validation-for="Title"></span>
     <label asp-for="Author"></label>
     <input asp-for="Author" />
+    <span asp-validation-for="Author"></span>
     <label asp-for="Year"></label>
     <input asp-for="Year" type="number" />
+    <span asp-validation-for="Year"></span>
     <label asp-for="Publisher"></label>
     <input asp-for="Publisher" />
+    <span asp-validation-for="Publisher"></span>
     <label asp-for="TocHtml"></label>
     <textarea asp-for="TocHtml" id="TocHtml"></textarea>
+    <span asp-validation-for="TocHtml"></span>
     <p class="actions">
         <button class="btn btn-accent" type="submit">Сохранить</button>
         <a class="btn" href="/">Отмена</a>
     </p>
 </form>
 @section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.21.0/dist/jquery.validate.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation-unobtrusive@4.0.0/dist/jquery.validate.unobtrusive.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/tinymce@7/tinymce.min.js" referrerpolicy="origin"></script>
     <script>
         tinymce.init({

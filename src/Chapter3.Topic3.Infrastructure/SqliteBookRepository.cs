@@ -1,45 +1,38 @@
 using System.Xml;
 using Chapter3.Topic3.Domain;
 using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
 
 namespace Chapter3.Topic3.Infrastructure;
 
-public sealed class SqliteBookRepository(string connectionString, StoredProcedures procedures) : IBookRepository
+public interface ISqliteBookRepository : IBookRepository;
+
+public sealed class SqliteBookRepository(LibraryContext db, StoredProcedures procedures) : ISqliteBookRepository
 {
     public Task<IReadOnlyList<Book>> ListAsync() =>
         Query(procedures.Load("book_select"));
 
     public async Task<Book?> GetAsync(int id)
     {
-        var books = await Query(procedures.Load("book_select_by_id"), cmd =>
-            cmd.Parameters.AddWithValue("@id", id));
+        var books = await Query(procedures.Load("book_select_by_id"), P("@id", id));
         return books.Count == 0 ? null : books[0];
     }
 
     public async Task<Book> AddAsync(Book book)
     {
-        var books = await Query(procedures.Load("book_insert"), cmd => AddBookParams(cmd, book));
+        var books = await Query(procedures.Load("book_insert"), BookParams(book));
         return books[0];
     }
 
     public async Task<Book?> SaveAsync(Book book)
     {
-        var books = await Query(procedures.Load("book_update"), cmd =>
-        {
-            cmd.Parameters.AddWithValue("@id", book.Id);
-            AddBookParams(cmd, book);
-        });
+        var books = await Query(procedures.Load("book_update"), [P("@id", book.Id), .. BookParams(book)]);
         return books.Count == 0 ? null : books[0];
     }
 
     public async Task RemoveAsync(int id)
     {
-        await using var connection = new SqliteConnection(connectionString);
-        await connection.OpenAsync();
-        await using var cmd = connection.CreateCommand();
-        cmd.CommandText = procedures.Load("book_delete");
-        cmd.Parameters.AddWithValue("@id", id);
-        await cmd.ExecuteNonQueryAsync();
+        await db.Database.ExecuteSqlRawAsync(procedures.Load("book_delete"), P("@id", id));
     }
 
     public async Task<IReadOnlyList<string>> HeadingsAsync(int id)
@@ -56,42 +49,25 @@ public sealed class SqliteBookRepository(string connectionString, StoredProcedur
             .ToList();
     }
 
-    private async Task<IReadOnlyList<Book>> Query(string sql, Action<SqliteCommand>? bind = null)
+    private async Task<IReadOnlyList<Book>> Query(string sql, params object[] parameters)
     {
-        await using var connection = new SqliteConnection(connectionString);
-        await connection.OpenAsync();
-        await using var cmd = connection.CreateCommand();
-        cmd.CommandText = sql;
-        bind?.Invoke(cmd);
-        return await ReadBooks(cmd);
+        var rows = await db.Database.SqlQueryRaw<BookRecord>(sql, parameters).ToListAsync();
+        return rows.Select(ToBook).ToList();
     }
 
-    private static void AddBookParams(SqliteCommand cmd, Book book)
-    {
-        cmd.Parameters.AddWithValue("@title", book.Title);
-        cmd.Parameters.AddWithValue("@author", book.Author);
-        cmd.Parameters.AddWithValue("@year", book.Year);
-        cmd.Parameters.AddWithValue("@publisher", book.Publisher);
-        cmd.Parameters.AddWithValue("@toc", book.Toc.Xml);
-    }
+    private static Book ToBook(BookRecord row) =>
+        Book.Rehydrate(row.Id, row.Title, row.Author, row.Year, row.Publisher, TableOfContents.FromXml(row.Toc));
 
-    private static async Task<List<Book>> ReadBooks(SqliteCommand cmd)
-    {
-        await using var reader = await cmd.ExecuteReaderAsync();
-        var books = new List<Book>();
-        while (await reader.ReadAsync())
-        {
-            books.Add(Book.Rehydrate(
-                reader.GetInt32(reader.GetOrdinal("id")),
-                reader.GetString(reader.GetOrdinal("title")),
-                reader.GetString(reader.GetOrdinal("author")),
-                reader.GetInt32(reader.GetOrdinal("year")),
-                reader.GetString(reader.GetOrdinal("publisher")),
-                TableOfContents.FromXml(reader.GetString(reader.GetOrdinal("toc")))));
-        }
+    private static object[] BookParams(Book book) =>
+    [
+        P("@title", book.Title),
+        P("@author", book.Author),
+        P("@year", book.Year),
+        P("@publisher", book.Publisher),
+        P("@toc", book.Toc.Xml)
+    ];
 
-        return books;
-    }
+    private static SqliteParameter P(string name, object value) => new(name, value);
 
     private static List<string> HeadingsOf(Book book)
     {

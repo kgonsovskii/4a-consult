@@ -18,6 +18,14 @@
         </div>
     </header>
     <main class="wrap">
+        @if (TempData["Status"] is string status)
+        {
+            <p class="flash flash-ok">@status</p>
+        }
+        @if (TempData["Error"] is string error)
+        {
+            <p class="flash flash-err">@error</p>
+        }
         @RenderBody()
     </main>
     @await RenderSectionAsync("Scripts", required: false)

@@ -1,4 +1,4 @@
-using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
 
 namespace Chapter3.Topic3.Infrastructure;
 
@@ -15,7 +15,7 @@ public sealed class Schema(SqlScripts sql)
 
     public static string Resolve(string connectionString, string contentRoot)
     {
-        var settings = new SqliteConnectionStringBuilder(connectionString);
+        var settings = new Microsoft.Data.Sqlite.SqliteConnectionStringBuilder(connectionString);
         if (settings.DataSource is not ":memory:" && !Path.IsPathRooted(settings.DataSource))
         {
             settings.DataSource = Path.GetFullPath(Path.Combine(contentRoot, settings.DataSource));
@@ -26,30 +26,18 @@ public sealed class Schema(SqlScripts sql)
 
     public async Task ApplyAsync(string connectionString)
     {
-        await using var connection = new SqliteConnection(connectionString);
-        await connection.OpenAsync();
-        await Exec(connection, sql.Load("schema.sql"));
-        await InstallProcedures(connection);
-        await Exec(connection, sql.Load("seed.sql"));
-    }
-
-    private async Task InstallProcedures(SqliteConnection connection)
-    {
+        var options = new DbContextOptionsBuilder<LibraryContext>().UseSqlite(connectionString).Options;
+        await using var db = new LibraryContext(options);
+        await db.Database.OpenConnectionAsync();
+        await db.Database.ExecuteSqlRawAsync(sql.Load("schema.sql"));
         foreach (var name in ProcedureFiles)
         {
-            await using var cmd = connection.CreateCommand();
-            cmd.CommandText =
-                "INSERT OR REPLACE INTO stored_procedure (name, body) VALUES (@name, @body)";
-            cmd.Parameters.AddWithValue("@name", name);
-            cmd.Parameters.AddWithValue("@body", sql.Load($"{name}.sql"));
-            await cmd.ExecuteNonQueryAsync();
+            await db.Database.ExecuteSqlRawAsync(
+                "INSERT OR REPLACE INTO stored_procedure (name, body) VALUES ({0}, {1})",
+                name,
+                sql.Load($"{name}.sql"));
         }
-    }
 
-    private static async Task Exec(SqliteConnection connection, string sql)
-    {
-        await using var cmd = connection.CreateCommand();
-        cmd.CommandText = sql;
-        await cmd.ExecuteNonQueryAsync();
+        await db.Database.ExecuteSqlRawAsync(sql.Load("seed.sql"));
     }
 }

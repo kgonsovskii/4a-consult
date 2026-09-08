@@ -31,8 +31,17 @@ public sealed class BooksController(IBookRepository books) : Controller
             return View("Edit", form);
         }
 
-        var book = await books.AddAsync(form.ToBook());
-        return RedirectToAction(nameof(Details), new { id = book.Id });
+        try
+        {
+            var book = await books.AddAsync(form.ToBook());
+            TempData["Status"] = "Книга добавлена.";
+            return RedirectToAction(nameof(Details), new { id = book.Id });
+        }
+        catch (Exception ex)
+        {
+            ModelState.AddModelError(string.Empty, ex.Message);
+            return View("Edit", form);
+        }
     }
 
     public async Task<IActionResult> Edit(int id)
@@ -50,8 +59,23 @@ public sealed class BooksController(IBookRepository books) : Controller
         }
 
         form.Id = id;
-        var book = await books.SaveAsync(form.ToBook());
-        return book is null ? NotFound() : RedirectToAction(nameof(Details), new { id });
+        try
+        {
+            var book = await books.SaveAsync(form.ToBook());
+            if (book is null)
+            {
+                TempData["Error"] = "Книга не найдена.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            TempData["Status"] = "Книга сохранена.";
+            return RedirectToAction(nameof(Details), new { id });
+        }
+        catch (Exception ex)
+        {
+            ModelState.AddModelError(string.Empty, ex.Message);
+            return View(form);
+        }
     }
 
     public async Task<IActionResult> Delete(int id)

@@ -34,14 +34,30 @@ public sealed class EditModel(IBookRepository books) : PageModel
             return Page();
         }
 
-        if (id is null)
+        try
         {
-            var created = await books.AddAsync(Form.ToBook());
-            return RedirectToPage("Details", new { id = created.Id });
-        }
+            if (id is null)
+            {
+                var created = await books.AddAsync(Form.ToBook());
+                TempData["Status"] = "Книга добавлена.";
+                return RedirectToPage("Details", new { id = created.Id });
+            }
 
-        Form.Id = id.Value;
-        var updated = await books.SaveAsync(Form.ToBook());
-        return updated is null ? NotFound() : RedirectToPage("Details", new { id });
+            Form.Id = id.Value;
+            var updated = await books.SaveAsync(Form.ToBook());
+            if (updated is null)
+            {
+                TempData["Error"] = "Книга не найдена.";
+                return RedirectToPage("Index");
+            }
+
+            TempData["Status"] = "Книга сохранена.";
+            return RedirectToPage("Details", new { id });
+        }
+        catch (Exception ex)
+        {
+            ModelState.AddModelError(string.Empty, ex.Message);
+            return Page();
+        }
     }
 }
