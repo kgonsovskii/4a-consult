@@ -167,7 +167,7 @@ WHERE x."StatusId" != 3;
 
 ### 1.4 Что такое hints
 
-Подсказки оптимизатору: как выполнить запрос, если его план вас не устраивает — какой индекс взять, какой join, читать ли с блокировкой. В SQL Server это `WITH (NOLOCK)`, `OPTION (RECOMPILE)` и т.п. В Postgres из коробки почти нет, но зато можно крутить планировщик: `SET enable_seqscan = off`, `enable_hashjoin`, `random_page_cost`, CTE с `MATERIALIZED`. Настоящие хинты в тексте запроса — только расширением `pg_hint_plan`.
+Подсказки оптимизатору: как выполнить запрос, если его план вас не устраивает — какой индекс взять, какой join, читать ли с блокировкой. В SQL Server это `WITH (NOLOCK)`, `OPTION (RECOMPILE)` и т.п. В Postgres из коробки почти нет, но зато можно крутить планировщик: `SET enable_seqscan = off`, `enable_hashjoin`.
 
 ---
 
