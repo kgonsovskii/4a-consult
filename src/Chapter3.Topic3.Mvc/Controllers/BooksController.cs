@@ -2,7 +2,7 @@ using Chapter3.Topic3.Application;
 using Chapter3.Topic3.Domain;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Chapter3.Topic3.Mvc;
+namespace Chapter3.Topic3.Mvc.Controllers;
 
 public sealed class BooksController(IBookRepository books) : Controller
 {
