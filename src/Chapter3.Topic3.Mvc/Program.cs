@@ -1,11 +1,12 @@
 using Chapter3.Topic3.Domain;
 using Chapter3.Topic3.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
-using Npgsql;
 
 var builder = WebApplication.CreateBuilder(args);
 var testing = builder.Environment.IsEnvironment("Testing");
-var connectionString = builder.Configuration.GetConnectionString("Library")!;
+var connectionString = Schema.Resolve(
+    builder.Configuration.GetConnectionString("Library")!,
+    builder.Environment.ContentRootPath);
 
 builder.Services.AddControllersWithViews(options =>
 {
@@ -14,8 +15,7 @@ builder.Services.AddControllersWithViews(options =>
         options.Filters.Add(new IgnoreAntiforgeryTokenAttribute());
     }
 });
-builder.Services.AddSingleton(_ => NpgsqlDataSource.Create(connectionString));
-builder.Services.AddSingleton<IBookRepository, PostgresBookRepository>();
+builder.Services.AddSingleton<IBookRepository>(_ => new SqliteBookRepository(connectionString));
 
 if (!testing)
 {

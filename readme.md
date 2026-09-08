@@ -391,15 +391,15 @@ return false;
 
 ### 3.3 Опциональное задание (его выполнение будет Вашим большим преимуществом)
 
-1. PostgreSQL вместо MS SQL Express.
-2. База `library`: книги домашней библиотеки. Поля: название, автор, год, издательство, оглавление в XML.
-3. Функции: `book_insert`, `book_update`, `book_delete`, `book_select`, `book_select_by_id`.
+1. SQLite вместо MS SQL Express.
+2. База `library.db`: книги домашней библиотеки. Поля: название, автор, год, издательство, оглавление в XML.
+3. SQL в сборке: `book_insert`, `book_update`, `book_delete`, `book_select`, `book_select_by_id`.
 4. Два проекта: MVC и Web Forms.
-5. Список, карточка, создание, правка, удаление — только через функции из п.3.
+5. Список, карточка, создание, правка, удаление — только через SQL из п.3.
 6. В карточке HTML-редактор оглавления, в базу уходит XML.
-7. Выборка из XML: заголовки `h2` через `xmltable`.
+7. Выборка из XML: заголовки `h2` (`//h2`).
 
-При старте приложение само создаёт базу, таблицы, функции и данные.
+При старте приложение само создаёт файл БД, таблицы и данные.
 
 <div align="right"><small><a href="src/Chapter3.Topic3.Domain">src/Chapter3.Topic3.Domain</a></small></div>
 <div align="right"><small><a href="src/Chapter3.Topic3.Application">src/Chapter3.Topic3.Application</a></small></div>
@@ -408,7 +408,5 @@ return false;
 <div align="right"><small><a href="src/Chapter3.Topic3.WebForms">src/Chapter3.Topic3.WebForms</a></small></div>
 
 ```sql
-SELECT b.title, t.heading
-FROM book b,
-     xmltable('//h2' PASSING b.toc COLUMNS heading text PATH '.') AS t;
+SELECT title, toc FROM book;
 ```

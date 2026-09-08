@@ -1,4 +1,4 @@
-using Npgsql;
+using Microsoft.Data.Sqlite;
 
 namespace Chapter3.Topic3.Infrastructure;
 
@@ -6,46 +6,27 @@ public static class Schema
 {
     public static async Task ApplyAsync(string connectionString)
     {
-        await EnsureDatabase(connectionString);
-        await using var db = NpgsqlDataSource.Create(connectionString);
-        await Exec(db, Read("schema.sql"));
-        await Exec(db, Read("seed.sql"));
+        await using var connection = new SqliteConnection(connectionString);
+        await connection.OpenAsync();
+        await Exec(connection, SqlScripts.Load("schema.sql"));
+        await Exec(connection, SqlScripts.Load("seed.sql"));
     }
 
-    private static async Task EnsureDatabase(string connectionString)
+    public static string Resolve(string connectionString, string contentRoot)
     {
-        var builder = new NpgsqlConnectionStringBuilder(connectionString);
-        var name = builder.Database ?? "library";
-        builder.Database = "postgres";
-
-        await using var conn = new NpgsqlConnection(builder.ConnectionString);
-        await conn.OpenAsync();
-
-        await using var exists = new NpgsqlCommand(
-            "SELECT 1 FROM pg_database WHERE datname = $1", conn);
-        exists.Parameters.AddWithValue(name);
-        if (await exists.ExecuteScalarAsync() is not null)
+        var settings = new SqliteConnectionStringBuilder(connectionString);
+        if (settings.DataSource is not ":memory:" && !Path.IsPathRooted(settings.DataSource))
         {
-            return;
+            settings.DataSource = Path.GetFullPath(Path.Combine(contentRoot, settings.DataSource));
         }
 
-        await using var create = new NpgsqlCommand(
-            $"CREATE DATABASE \"{name.Replace("\"", "\"\"")}\"", conn);
-        await create.ExecuteNonQueryAsync();
+        return settings.ConnectionString;
     }
 
-    private static async Task Exec(NpgsqlDataSource db, string sql)
+    private static async Task Exec(SqliteConnection connection, string sql)
     {
-        await using var cmd = db.CreateCommand(sql);
+        await using var cmd = connection.CreateCommand();
+        cmd.CommandText = sql;
         await cmd.ExecuteNonQueryAsync();
-    }
-
-    private static string Read(string file)
-    {
-        var name = $"Chapter3.Topic3.Infrastructure.Sql.{file}";
-        using var stream = typeof(Schema).Assembly.GetManifestResourceStream(name)
-            ?? throw new InvalidOperationException(name);
-        using var reader = new StreamReader(stream);
-        return reader.ReadToEnd();
     }
 }

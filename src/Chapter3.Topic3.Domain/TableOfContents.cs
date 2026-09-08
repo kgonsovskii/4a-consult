@@ -17,11 +17,11 @@ public sealed class TableOfContents
     {
         if (string.IsNullOrWhiteSpace(xml))
         {
-            return new("<toc/>", "");
+            return new TableOfContents("<toc/>", "");
         }
 
         var doc = new XmlDocument();
         doc.LoadXml(xml);
-        return new(doc.OuterXml, doc.DocumentElement?.InnerXml ?? "");
+        return new TableOfContents(doc.OuterXml, doc.DocumentElement?.InnerXml ?? "");
     }
 }

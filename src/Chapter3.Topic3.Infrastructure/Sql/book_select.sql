@@ -1,0 +1,1 @@
+SELECT * FROM book ORDER BY id;
