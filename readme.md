@@ -436,7 +436,7 @@ SELECT title, toc FROM book;
 
 <div align="right"><small><a href="src/Chapter4.Topic2">src/Chapter4.Topic2</a></small></div>
 
-0 м.
+0 м. Столбы на одном уровне.
 
 ```
 184,2 / 2 = 100 − 7,9 = 92,1

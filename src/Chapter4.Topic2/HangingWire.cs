@@ -5,6 +5,11 @@ public sealed class HangingWire
     public decimal DistanceBetweenPoles(decimal length, decimal height, decimal clearance)
     {
         var drop = height - clearance;
-        return length / 2m == drop ? 0m : throw new ArgumentException("Провод длиннее провиса.");
+        if (length / 2m != drop)
+        {
+            throw new ArgumentException("Половина провода не равна провису.");
+        }
+
+        return 0m;
     }
 }
