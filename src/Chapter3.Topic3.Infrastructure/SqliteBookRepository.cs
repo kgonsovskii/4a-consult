@@ -4,27 +4,27 @@ using Microsoft.Data.Sqlite;
 
 namespace Chapter3.Topic3.Infrastructure;
 
-public sealed class SqliteBookRepository(string connectionString, SqlScripts sql) : IBookRepository
+public sealed class SqliteBookRepository(string connectionString, StoredProcedures procedures) : IBookRepository
 {
     public Task<IReadOnlyList<Book>> ListAsync() =>
-        Query(sql.Load("book_select.sql"));
+        Query(procedures.Load("book_select"));
 
     public async Task<Book?> GetAsync(int id)
     {
-        var books = await Query(sql.Load("book_select_by_id.sql"), cmd =>
+        var books = await Query(procedures.Load("book_select_by_id"), cmd =>
             cmd.Parameters.AddWithValue("@id", id));
         return books.Count == 0 ? null : books[0];
     }
 
     public async Task<Book> AddAsync(Book book)
     {
-        var books = await Query(sql.Load("book_insert.sql"), cmd => AddBookParams(cmd, book));
+        var books = await Query(procedures.Load("book_insert"), cmd => AddBookParams(cmd, book));
         return books[0];
     }
 
     public async Task<Book?> SaveAsync(Book book)
     {
-        var books = await Query(sql.Load("book_update.sql"), cmd =>
+        var books = await Query(procedures.Load("book_update"), cmd =>
         {
             cmd.Parameters.AddWithValue("@id", book.Id);
             AddBookParams(cmd, book);
@@ -37,7 +37,7 @@ public sealed class SqliteBookRepository(string connectionString, SqlScripts sql
         await using var connection = new SqliteConnection(connectionString);
         await connection.OpenAsync();
         await using var cmd = connection.CreateCommand();
-        cmd.CommandText = sql.Load("book_delete.sql");
+        cmd.CommandText = procedures.Load("book_delete");
         cmd.Parameters.AddWithValue("@id", id);
         await cmd.ExecuteNonQueryAsync();
     }

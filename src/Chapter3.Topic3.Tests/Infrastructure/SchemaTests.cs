@@ -25,11 +25,16 @@ public sealed class SchemaTests
         {
             var sql = new SqlScripts();
             await new Schema(sql).ApplyAsync(cs);
-            var books = await new SqliteBookRepository(cs, sql).ListAsync();
+            var procedures = new StoredProcedures(cs);
+            var books = await new SqliteBookRepository(cs, procedures).ListAsync();
 
             books.Should().HaveCount(2);
             books[0].Title.Should().Be("Обломов");
             books[0].Toc.Html.Should().Contain("Глава 1");
+            procedures.Load("book_select").Should().Contain("SELECT");
+            procedures.Load("book_insert").Should().Contain("INSERT");
+            procedures.Load("book_update").Should().Contain("UPDATE");
+            procedures.Load("book_delete").Should().Contain("DELETE");
         }
         finally
         {

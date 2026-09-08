@@ -9,8 +9,9 @@ public static class LibraryServices
     {
         services.AddSingleton<SqlScripts>();
         services.AddSingleton<Schema>();
+        services.AddSingleton(sp => new StoredProcedures(connectionString));
         services.AddSingleton<IBookRepository>(sp =>
-            new SqliteBookRepository(connectionString, sp.GetRequiredService<SqlScripts>()));
+            new SqliteBookRepository(connectionString, sp.GetRequiredService<StoredProcedures>()));
         return services;
     }
 }

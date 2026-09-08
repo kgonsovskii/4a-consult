@@ -6,3 +6,8 @@ CREATE TABLE IF NOT EXISTS book (
     publisher TEXT    NOT NULL,
     toc       TEXT    NOT NULL DEFAULT '<toc/>'
 );
+
+CREATE TABLE IF NOT EXISTS stored_procedure (
+    name TEXT PRIMARY KEY,
+    body TEXT NOT NULL
+);
