@@ -175,7 +175,7 @@ WHERE x."StatusId" != 3;
 
 В Postgres своих hints нет. Крутить планировщик: `SET enable_seqscan = off`, `enable_hashjoin`.
 
-Или `pg_hint_plan`: `/*+ HashJoin(a b) SeqScan(a) */`. `UPDLOCK` → `FOR UPDATE`. У `NOLOCK` аналога нет: MVCC и так не держит читателя, грязное чтение не включить.
+Или `pg_hint_plan`: `/*+ HashJoin(a b) SeqScan(a) */`. `UPDLOCK` → `FOR UPDATE`. У `NOLOCK` аналога нет.
 
 ---
 
