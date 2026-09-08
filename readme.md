@@ -317,6 +317,15 @@ WHERE Bid.StatusId = 6
 ```sql
 UPDATE Bid
 SET StatusId = 7
+WHERE Id = @BidId
+  AND StatusId = 6;
+```
+
+или сам select:
+
+```sql
+UPDATE Bid
+SET StatusId = 7
 FROM Purchase
 WHERE Purchase.Id = Bid.PurchaseId
   AND Bid.StatusId = 6
