@@ -230,4 +230,12 @@ END;
 $$;
 ```
 
-<small>`CALL transfer(1, 2, 50);`</small>
+<small>
+
+```sql
+BEGIN;
+CALL transfer(1, 2, 50);
+COMMIT;
+```
+
+</small>
