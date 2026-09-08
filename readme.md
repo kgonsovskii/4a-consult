@@ -225,3 +225,5 @@ BEGIN
 END;
 $$;
 ```
+
+<small>`CALL transfer(1, 2, 50);`</small>
