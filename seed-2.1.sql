@@ -2,7 +2,7 @@ DROP TABLE IF EXISTS T;
 
 CREATE TABLE T (
     N int PRIMARY KEY,
-    S numeric(12, 2) NOT NULL
+    S numeric(12, 2) NOT NULL CHECK (S >= 0)
 );
 
 INSERT INTO T (N, S) VALUES

@@ -214,6 +214,14 @@ AS $$
 DECLARE
     bal numeric;
 BEGIN
+    IF n1 = n2 THEN
+        RAISE EXCEPTION 'Счета должны быть разными';
+    END IF;
+
+    IF amount <= 0 THEN
+        RAISE EXCEPTION 'Сумма должна быть больше нуля';
+    END IF;
+
     PERFORM 1
     FROM T
     WHERE N IN (n1, n2)
