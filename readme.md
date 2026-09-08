@@ -239,3 +239,39 @@ COMMIT;
 ```
 
 </small>
+
+---
+
+### 2.2 Задача на вывод в XML
+
+Пусть есть таблица `Purchase` со следующим видом и содержанием. Что вернет SQL запрос?
+
+| Id | Code | Name | StatusId |
+| ---: | --- | --- | ---: |
+| 1 | SBR003-202001 | Конкурс СМСП | 45 |
+| 2 | SBR003-202002 | Запрос предложений | 2 |
+
+<div align="right"><small><a href="seed-2.2.sql">seed - 2.2.sql</a></small></div>
+
+```sql
+SELECT Id, Code, Name, StatusId
+FROM Purchase
+FOR XML PATH('row'), ROOT('data');
+```
+
+```xml
+<data>
+  <row>
+    <Id>1</Id>
+    <Code>SBR003-202001</Code>
+    <Name>Конкурс СМСП</Name>
+    <StatusId>45</StatusId>
+  </row>
+  <row>
+    <Id>2</Id>
+    <Code>SBR003-202002</Code>
+    <Name>Запрос предложений</Name>
+    <StatusId>2</StatusId>
+  </row>
+</data>
+```
