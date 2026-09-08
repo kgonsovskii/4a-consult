@@ -409,10 +409,6 @@ return false;
 
 <div align="right"><small><a href="src">src</a></small></div>
 
-```sql
-SELECT title, toc FROM book;
-```
-
 ---
 
 ## 4. Инженерия и обработка информации
