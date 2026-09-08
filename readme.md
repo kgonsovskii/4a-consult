@@ -56,10 +56,25 @@ WHERE T2.ID IS NULL;
 | 5 | dgadfterdsgsdgad | Запрос предложений 5 | 45 |
 | 6 | argrgag | Запрос предложений 6 | 2 |
 
+<div align="right"><small><a href="seed-1.2.sql">seed - 1.2.sql</a></small></div>
+
 ```sql
-SELECT Id, Code, Name, StatusId
-FROM T
-FOR XML AUTO, ROOT('root');
+SELECT xmlelement(
+    name root,
+    xmlagg(
+        xmlelement(
+            name "T",
+            xmlattributes(
+                Id AS "Id",
+                Code AS "Code",
+                Name AS "Name",
+                StatusId AS "StatusId"
+            )
+        )
+        ORDER BY Id
+    )
+)
+FROM T;
 ```
 
 ```xml
@@ -74,9 +89,22 @@ FOR XML AUTO, ROOT('root');
 ```
 
 ```sql
-SELECT Id, Code, Name, StatusId
-FROM T
-FOR XML PATH('T'), ROOT('root');
+SELECT xmlelement(
+    name root,
+    xmlagg(
+        xmlelement(
+            name "T",
+            xmlforest(
+                Id AS "Id",
+                Code AS "Code",
+                Name AS "Name",
+                StatusId AS "StatusId"
+            )
+        )
+        ORDER BY Id
+    )
+)
+FROM T;
 ```
 
 ```xml
