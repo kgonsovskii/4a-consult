@@ -1,6 +1,7 @@
+using Chapter4.Topic1;
 using FluentAssertions;
 
-namespace Chapter8.Topic1.Tests;
+namespace Chapter4.Topic1.Tests;
 
 public sealed class TaxSystemsTests
 {
